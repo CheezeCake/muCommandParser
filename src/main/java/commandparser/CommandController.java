@@ -12,25 +12,38 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CommandController
 {
-	@RequestMapping(value="/parse_command", method={RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value = "/parse_command", method = { RequestMethod.GET, RequestMethod.POST })
 	public Object parseCommand(@RequestParam(value="command", defaultValue="") String command)
 	{
+		command = command.toLowerCase();
 		System.out.println(command);
 
 		try {
-			String pattern = "(\\w*) ?(.*)";
-			Pattern r = Pattern.compile(pattern);
-			Matcher m = r.matcher(command);
+			final int LIST = 0;
+			final int SEARCH = 1;
 
-			if (m.find()) {
-				String[] keywords = { "recherche", "rechercher", "liste", "lister" };
-				String keyword = m.group(1);
-				String argument = m.group(2);
+			final String[] commands = {
+				"list",
+				"search"
+			};
 
-				System.out.println(keyword + ", " + argument);
+			final Pattern[] patterns = {
+				Pattern.compile("^lister?( (chansons?|musiques?)?)?$"),
+				Pattern.compile("^rechercher?( (artiste|titre)?)?(.*)$")
+			};
 
-				if (Arrays.asList(keywords).contains(keyword))
-					return new Command(keyword, m.group(2));
+			for (int i = 0; i < patterns.length; i++) {
+				Matcher m = patterns[i].matcher(command);
+				if (m.find()) {
+					switch (i) {
+						case LIST:
+							return new Command(commands[LIST]);
+						case SEARCH:
+							return new Search(commands[SEARCH],
+									(m.group(2) != null) ? m.group(2) : "everything",
+									(m.group(3) != null) ? m.group(3) : "");
+					}
+				}
 			}
 		}
 		catch (Exception e)
