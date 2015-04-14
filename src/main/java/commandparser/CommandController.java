@@ -29,7 +29,7 @@ public class CommandController
 
 			final Pattern[] patterns = {
 				Pattern.compile("^lister?( (chansons?|musiques?)?)?$"),
-				Pattern.compile("^rechercher?( (artiste|titre)?)?(.*)$")
+				Pattern.compile("^rechercher?( (artiste|titre)?)?( (.*))?$")
 			};
 
 			for (int i = 0; i < patterns.length; i++) {
@@ -41,7 +41,7 @@ public class CommandController
 						case SEARCH:
 							return new Search(commands[SEARCH],
 									(m.group(2) != null) ? m.group(2) : "everything",
-									(m.group(3) != null) ? m.group(3) : "");
+									(m.group(4) != null) ? m.group(4) : "");
 					}
 				}
 			}
