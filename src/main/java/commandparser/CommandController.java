@@ -39,8 +39,7 @@ public class CommandController
 						case LIST:
 							return new Command(commands[LIST]);
 						case SEARCH:
-							return new Search(commands[SEARCH],
-									(m.group(2) != null) ? m.group(2) : "everything",
+							return new Search((m.group(2) != null) ? m.group(2) : "everything",
 									(m.group(4) != null) ? m.group(4) : "");
 					}
 				}

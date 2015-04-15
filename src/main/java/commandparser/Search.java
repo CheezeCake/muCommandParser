@@ -6,9 +6,9 @@ public class Search extends Command
 
 	private String search = "";
 
-	public Search(String type, String searchBy, String search)
+	public Search(String searchBy, String search)
 	{
-		super(type);
+		super("search");
 		this.searchBy = searchBy;
 		this.search = search;
 	}
