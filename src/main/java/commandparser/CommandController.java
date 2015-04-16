@@ -20,15 +20,14 @@ public class CommandController
 		try {
 			final int LIST = 0;
 			final int SEARCH = 1;
-
-			final String[] commands = {
-				"list",
-				"search"
-			};
+			final int ADD = 2;
+			final int ADD2 = 3;
 
 			final Pattern[] patterns = {
-				Pattern.compile("^lister?( (chansons?|musiques?)?)?$"),
-				Pattern.compile("^rechercher?( (artiste|titre)?)?( (.*))?$")
+				Pattern.compile("^lister?( (chansons?|musiques?))?$"),
+				Pattern.compile("^rechercher?( (artiste|titre))?( (.+))?$"),
+				Pattern.compile("^ajout(er)?(( (.+))?( par(.+)))?$"),
+				Pattern.compile("^ajout(er)?( (.+))$")
 			};
 
 			for (int i = 0; i < patterns.length; i++) {
@@ -36,10 +35,15 @@ public class CommandController
 				if (m.find()) {
 					switch (i) {
 						case LIST:
-							return new Command(commands[LIST]);
+							return new Command("list");
 						case SEARCH:
 							return new Search((m.group(2) != null) ? m.group(2) : "everything",
 									(m.group(4) != null) ? m.group(4) : "");
+						case ADD:
+							return new Add((m.group(6) != null) ? m.group(6) : "",
+									(m.group(4) != null) ? m.group(4) : "");
+						case ADD2:
+							return new Add((m.group(3) != null) ? m.group(3) : "", "");
 					}
 				}
 			}
