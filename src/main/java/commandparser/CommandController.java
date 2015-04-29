@@ -25,7 +25,7 @@ public class CommandController
 
 			final Pattern[] patterns = {
 				Pattern.compile("^lister?( (chansons?|musiques?))?$"),
-				Pattern.compile("^rechercher?( (artiste|titre))?( (.+))?$"),
+				Pattern.compile("^rechercher?( (artiste|titre))?( (.+))$"),
 				Pattern.compile("^ajout(er)?(( (.+))?( par(.+)))?$"),
 				Pattern.compile("^ajout(er)?( (.+))$")
 			};
@@ -37,7 +37,9 @@ public class CommandController
 						case LIST:
 							return new Command("list");
 						case SEARCH:
-							return new Search((m.group(2) != null) ? m.group(2) : "everything",
+							return new Search((m.group(2) != null)
+									? ((m.group(2).equals("artiste")) ? "artist" : "title")
+									: "everything",
 									(m.group(4) != null) ? m.group(4) : "");
 						case ADD:
 							return new Add((m.group(6) != null) ? m.group(6) : "",
